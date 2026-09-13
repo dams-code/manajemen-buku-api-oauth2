@@ -25,6 +25,21 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-8CD4F5?style=for-the-badge&logo=sweetalert2&logoColor=black)
 
 
+## Sekilas Update Halaman Yang Sudah Dikerjakan
+
+<div align="center">
+  <table border="0" style="border-collapse: collapse; border: none;">
+    <tr>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/hasil-revisi-halaman-buku.png" alt="Tampilan Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan revisi halaman manajemen Buku</sub>
+        </p>
+      </td>
+    </tr>
+  </table>
+</div>
+
 ## Endpoints
 
 | Method | Endpoint | Description |
