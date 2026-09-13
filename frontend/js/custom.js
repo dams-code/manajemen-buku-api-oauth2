@@ -24,13 +24,30 @@ async function getBuku(){
                 <td class="align-middle">${item.tahun}</td>
                 <td class="align-middle">${item.genre}</td>
                 <td class="align-middle">
-                    <span class="badge py-2 px-3 rounded-pill ${item.tersedia ? "text-bg-success" : "text-bg-danger"}">
+                    <span id="spnStatusBuku_${item.id}" class="badge py-2 px-3 rounded-pill ${item.tersedia ? "text-bg-success" : "text-bg-danger"}">
                         ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
                     </span>
                 </td>
                 <td class="d-flex gap-3 justify-content-center">
                     <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);"><i class="bi bi-pencil"></i> Update</button>
                     <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);"><i class="bi bi-trash-fill"></i> Hapus</button>
+                </td>
+
+                <td class="align-middle px-4 text-center">
+                    <div class="form-check form-switch d-flex align-items-center gap-2 justify-content-center">
+                        <input
+                            class="form-check-input status-switch"
+                            type="checkbox"
+                            role="switch"
+                            id="switchStatusBuku_${item.id}"
+                            data-id="${item.id}"
+                            ${item.tersedia ? "checked" : ""}
+                            onchange=(updateStatusBuku(this))
+                        >
+                        <label class="form-check-label text-muted small ${item.tersedia ? "text-success fw-bold" : "text-danger fw-bold"}" for="switchStatusBuku" id="lblStatusBuku_${item.id}">
+                            ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
+                        </label>
+                    </div>
                 </td>
             </tr>
         `).join("");
@@ -265,5 +282,51 @@ function setTambahBuku(){
     document.getElementById("tahun").value = "";
     document.getElementById("list_genre").value = "";
     document.getElementById("list_tersedia").value = "true";
+}
+
+async function updateStatusBuku(data){
+    const id = parseInt(data.dataset.id)
+    const cekSwitch = data.checked;
+
+    const lblStatusBuku = document.getElementById(`lblStatusBuku_${id}`);
+
+    const spnStatusBuku = document.getElementById(`spnStatusBuku_${id}`); 
+
+    data.disabled = true;
+
+    try{
+        const response = await fetch(`/buku/${id}?tersedia=${cekSwitch}`, {
+            method: 'PATCH'
+        });
+
+        if(!response.ok){
+            throw new Error(`Gagal mengganti status buku id ${id}`)
+        }
+
+        if(cekSwitch){
+
+            lblStatusBuku.textContent = "Tersedia";
+            lblStatusBuku.className = "form-check-label small text-success fw-bold";
+
+            spnStatusBuku.innerHTML = "Tersedia"
+            spnStatusBuku.className = "badge py-2 px-3 rounded-pill text-bg-success"
+        } else {
+            lblStatusBuku.textContent = "Tidak tersedia";
+            lblStatusBuku.className = "form-check-label small text-danger fw-bold";
+            
+            spnStatusBuku.innerHTML = "Tidak tersedia"
+            spnStatusBuku.className = "badge py-2 px-3 rounded-pill text-bg-danger"
+        }
+
+    }catch(error){
+        data.checked = !cekSwitch;
+        Swal.fire({
+            icon: "error",
+            title: "Gagal",
+            text: `Gagal mengganti status buku id ${id}`,
+        });
+    }finally{
+        data.disabled = false;
+    }
 }
 

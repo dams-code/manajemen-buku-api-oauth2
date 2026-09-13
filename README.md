@@ -1,19 +1,13 @@
-## Manajemen Buku API
+## Manajemen Buku API dengan OAuth2 (Tanpa JWT)
 
-Endpoint Manajemen buku sederhana menggunakan FastAPI, tanpa memakai database, data disimpan didalam python list.
+Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 
-## Topik
+## Topik Lanjutan (On-Progress)
 
- - FastAPI
- - Path / Query Parameters
- - Pydantic BaseModel
- - Request Body
- - In-Memory Data (Python List)
- - Filtering dan CRUD
- - HTTPException
- - jsonable_encoder
- - JSONResponse
- - Non-Database
+ - ✅ FastAPI
+ - ✅ APIRouter
+ - ✅ Modular Structure
+ - ⬜️ OAuth2 (Non-JWT)
 
 ## Tech Stack
 
@@ -95,137 +89,10 @@ karena lokasi middleware untuk mount index.htmlnya diset ke "/" untuk akses ke l
   http://127.0.0.1:8000/
 ```
 
-## Screenshot Bagian Frontend
-
-<div align="center">
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/tampilan-awal.png" alt="Tampilan Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 1:</b> Tampilan Awal Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <br>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/tambah-buku-awal.png" alt="Tambah Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 2:</b> Tambah Buku Awal</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-tambah-buku-awal.png" alt="Hasil Tambah Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 3:</b> Hasil Tambah Buku Awal</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/update-buku-awal.png" alt="Update Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 4:</b> Update Buku Awal</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-update-buku-awal.png" alt="Hasil Update Buku Awal" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 5:</b> Hasil Update Buku Awal</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-tambah-buku-kedua.png" alt="Hasil Tambah Buku Kedua" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 6:</b> Hasil Tambah Buku Kedua</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/perubahan-status-buku.png" alt="Perubahan Status Buku" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 7:</b> Hasil Perubahan Status Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/menghapus-buku.png" alt="Menghapus buku" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 8:</b> Menghapus Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/setelah-hapus.png" alt="Setelah Hapus buku" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 8:</b> Setelah Hapus Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/tambah-setelah-hapus.png" alt="Setelah Hapus buku" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 8:</b> Tambah Buku Lagi Setelah Hapus Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-tambah-setelah-hapus.png" alt="Setelah Hapus buku" width="100%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub><b>Gambar 8:</b> Hasil Tambah Buku Setelah Hapus Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-
 </div>
 
 ## Copyright Personal Portfolio
 * **Project Owner / Created By:** Damar Djati Wahyu Kemala
-* **Study:** FastAPI endpoint CRUD buku sederhana
+* **Study:** FastAPI endpoint CRUD buku sederhana versi ke 2 dengan OAuth2
 * **Date Created:** Agustus 2026
 * **GitHub Portfolio:** [https://github.com/dams-code](https://github.com/dams-code)
