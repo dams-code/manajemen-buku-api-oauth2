@@ -130,7 +130,7 @@ Salah satu contohnya :
 endpoint get_buku pada router "/buku" ini mengirim request ke sisi logic repositories/buku.py,
 yang didalamnya terdapat validasi untuk cek token (expired / token belum ada).
 
-- Kode dibawah ini endpoint dari "/buku" (Method: GET)
+- Kode dibawah ini endpoint dari "/buku" (Method: GET), bisa cek kodenya disini [buku.py](routers/buku.py)
 ```bash
 router_buku = APIRouter(prefix="/buku", tags=["buku"])
 
@@ -143,7 +143,7 @@ async def get_buku(id: Annotated[int | None, Query()] = None, judul: Annotated[s
 
 ```
 
-- Kode dibawah ini salah satu logic dari `repositories/buku.py`
+- Kode dibawah ini salah satu logic dari `repositories/buku.py`, bisa cek kodenya disini [buku.py](repositories/buku.py)
 ```bash
 async def result_get_buku(id: int | None=None, judul: str | None=None, token: str | None=None) -> ResultBuku[BukuBase | list[BukuBase]]:
     
