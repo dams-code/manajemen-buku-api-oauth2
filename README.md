@@ -42,19 +42,6 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 
 ## Endpoints
 
-### Buku
----
-| Method | Endpoint | Description |
-|---|---|---|
-| GET | `/buku` | Mendapatkan semua buku |
-| GET | `/buku?id=&judul=` | Mendapatkan buku berdasarkan ID atau berdasarkan judul dan bisa keduanya dengan Query Parameter |
-| GET | `/buku/{id}` | Mendapatkan buku berdasarkan ID |
-| POST | `/buku` | Menambahkan buku |
-| PUT | `/buku/{id}` | Mengubah buku |
-| PATCH | `/buku/{id}` | Update spesifik ke status ketersediaan buku |
-| DELETE | `/buku/{id}` | Menghapus buku |
----
-
 ### User - Auth
 ---
 | Method | Endpoint | Description |
@@ -69,6 +56,19 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 | GET | `/user` | Mendapatkan semua user |
 | GET | `/user?id=&username=` | Mendapatkan user berdasarkan ID atau berdasarkan username dan bisa keduanya dengan Query Parameter |
 
+---
+
+### Buku
+---
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/buku` | Mendapatkan semua buku |
+| GET | `/buku?id=&judul=` | Mendapatkan buku berdasarkan ID atau berdasarkan judul dan bisa keduanya dengan Query Parameter |
+| GET | `/buku/{id}` | Mendapatkan buku berdasarkan ID |
+| POST | `/buku` | Menambahkan buku |
+| PUT | `/buku/{id}` | Mengubah buku |
+| PATCH | `/buku/{id}` | Update spesifik ke status ketersediaan buku |
+| DELETE | `/buku/{id}` | Menghapus buku |
 ---
 
 ## Cara Clone dan Eksekusi Program
