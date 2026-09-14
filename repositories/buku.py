@@ -2,6 +2,7 @@ from schemas.buku import BukuBase, Buku, ResultBuku
 from fastapi import status, HTTPException
 from fastapi.encoders import jsonable_encoder
 # from fastapi.responses import JSONResponse
+from helpers.security import verify_access_token
 
 data_buku = [
     {
@@ -22,7 +23,16 @@ data_buku = [
     }
 ]
 
-async def result_get_buku(id: int | None=None, judul: str | None=None) -> ResultBuku[BukuBase | list[BukuBase]]:
+async def result_get_buku(id: int | None=None, judul: str | None=None, token: str | None=None) -> ResultBuku[BukuBase | list[BukuBase]]:
+    
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+    
     if id is not None or judul is not None:
         # result_data_buku = next((item_buku for item_buku in data_buku if (id is not None and item_buku["id"] == id) or (judul is not None and item_buku["judul"].lower() == judul.lower()) ), None)
         result_data_buku = next((item_buku for item_buku in data_buku if (id is not None and item_buku["id"] == id) or (judul is not None and judul.lower() in item_buku["judul"].lower()) ), None)
@@ -47,8 +57,16 @@ async def result_get_buku(id: int | None=None, judul: str | None=None) -> Result
         data=list_buku
     )
     
-async def result_get_buku_id(id: int) -> ResultBuku[BukuBase]:
+async def result_get_buku_id(id: int, token: str | None=None) -> ResultBuku[BukuBase]:
     
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+
     result_data_buku = next((item_buku for item_buku in data_buku if item_buku["id"] == id), None)
     
     if result_data_buku is None:
@@ -64,8 +82,16 @@ async def result_get_buku_id(id: int) -> ResultBuku[BukuBase]:
         data= BukuBase(**result_data_buku)
     )
     
-async def result_add_buku(buku: Buku) -> ResultBuku[BukuBase]:
+async def result_add_buku(buku: Buku, token: str | None=None) -> ResultBuku[BukuBase]:
     
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+
     if not data_buku:
         id_buku = 1
     else:
@@ -84,8 +110,16 @@ async def result_add_buku(buku: Buku) -> ResultBuku[BukuBase]:
         data= BukuBase(**result_data_buku)
     )
     
-async def result_update_buku(id: int, buku: Buku)-> ResultBuku[BukuBase]:
+async def result_update_buku(id: int, buku: Buku, token: str | None=None)-> ResultBuku[BukuBase]:
     
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+
     index_buku = next((index_buku for index_buku, item_buku in enumerate(data_buku) if item_buku["id"] == id), None)
     
     if index_buku is None:
@@ -106,8 +140,16 @@ async def result_update_buku(id: int, buku: Buku)-> ResultBuku[BukuBase]:
         data = BukuBase(**result_update_buku)
     )
     
-async def result_delete_buku(id: int) -> ResultBuku[None]:
+async def result_delete_buku(id: int, token: str | None=None) -> ResultBuku[None]:
     
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+
     index_buku = next((index for index, item_buku in enumerate(data_buku) if item_buku["id"] == id), None)
     
     if index_buku is None:
@@ -124,8 +166,16 @@ async def result_delete_buku(id: int) -> ResultBuku[None]:
         data=None
     )
     
-async def result_update_status_buku(id: int, tersedia: bool) -> ResultBuku[BukuBase]:
+async def result_update_status_buku(id: int, tersedia: bool, token: str | None=None) -> ResultBuku[BukuBase]:
     
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Sesi habis, login terlebih dahulu"
+        )
+
+    username_aktif = verify_access_token(token, 3600)
+
     index_buku = next((index for index, item_buku in enumerate(data_buku) if item_buku["id"] == id), None)
     
     if index_buku is None:

@@ -19,8 +19,8 @@ async def set_Format_JSON_Handler(request: Request, exc: HTTPException):
         }
     )
 
-app.include_router(router_buku)
 app.include_router(router_user)
+app.include_router(router_buku)
 
 origins = [
     "http://127.0.0.1:8000",

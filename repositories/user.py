@@ -1,11 +1,13 @@
+from helpers.security import create_access_token
 from schemas.user import UserInDB
-from fastapi import Query, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi import HTTPException, status
+from fastapi.security import OAuth2PasswordRequestForm
 from schemas.user import *
 from models.token import *
 from helpers.helper_password_user import verify_password, get_password_hash
+from helpers.security import *
 
-import secrets
+# import secrets
 
 temp_token: dict[str, str] = {}
 
@@ -39,16 +41,18 @@ async def result_login(form_data: OAuth2PasswordRequestForm) -> ResultUser[UserB
             headers={"WWW-Authenticate": "Bearer"}
         )
 
-    secret_token = secrets.token_hex(32)
+    # secret_token = secrets.token_hex(32)
+    # temp_token[secret_token] = user_aktif.username
 
-    temp_token[secret_token] = user_aktif.username
+    access_token = create_access_token(username=form_data.username)
 
     return ResultUser[UserBase](
         status=status.HTTP_200_OK,
         pesan=f"User {form_data.username} berhasil login",
         data_user=UserBase(**user_aktif.model_dump()),
         data_token=TokenSession(
-            access_token=list(temp_token.keys())[0],
+            # access_token=list(temp_token.keys())[0],
+            access_token = access_token,
             token_type="bearer",
             username=form_data.username
         )
@@ -56,14 +60,16 @@ async def result_login(form_data: OAuth2PasswordRequestForm) -> ResultUser[UserB
 
 async def result_get_user(id: int | None, username: str | None, token: str | None) -> ResultUser[UserBase | list[UserBase]]:
 
-    cek_username_aktif = next((user for user in data_user if user["username"].lower() == temp_token.get(token, "").lower()), None)
-
-    if cek_username_aktif is None:
+    if not token:
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Token tidak valid",
+            status_code= status.HTTP_401_UNAUTHORIZED,
+            detail="Token tidak ada / wajib disertakan",
             headers={"WWW-Authenticate": "Bearer"}
         )
+
+    # cek_username_aktif = next((user for user in data_user if user["username"].lower() == temp_token.get(token, "").lower()), None)
+
+    cek_username_aktif  = verify_access_token(token, 3600)
 
     if id is not None or username is not None:
         result_data_user = next((user for user in data_user if (id is None or user["id"] == id) and (username is None or user["username"].lower() == username.lower()) ), None)
@@ -88,6 +94,16 @@ async def result_get_user(id: int | None, username: str | None, token: str | Non
         data_user=list_user
     )
 
+async def result_logout(token: str) -> ResultUser[None]:
+    if token in temp_token:
+        del temp_token[token]
 
+    cek_username_aktif  = verify_access_token(token, 3600)
+
+    return ResultUser[None](
+        status=status.HTTP_200_OK,
+        pesan=f"Anda sudah logout",
+        data_user=None
+    )
 
 

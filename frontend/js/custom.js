@@ -1,67 +1,80 @@
 
 async function getBuku(){
-    const data_buku = await fetch("/buku")
+
+    const data_buku = await cek_auth_token("/buku");
+
+    if (!data_buku) return;
+
     const hasil = await data_buku.json();
 
     const tbody = document.getElementById("dataBuku")
 
     // console.log(hasil)
 
-    try{
-        Swal.fire({
-            icon: "success",
-            title: "Berhasil",
-            text: "Data buku berhasil ter-load ke table",
-            timer: 1500,
-            showConfirmButton: false
-        });
-
-        const htmlRows = hasil.data.map(item => `
+    if (!hasil.data || hasil.data.length === 0){
+        htmlRowsKosong = `
             <tr>
-                <td class="align-middle">${item.id}</td>
-                <td class="align-middle text-start">${item.judul}</td>
-                <td class="align-middle text-start">${item.penulis}</td>
-                <td class="align-middle">${item.tahun}</td>
-                <td class="align-middle">${item.genre}</td>
-                <td class="align-middle">
-                    <span id="spnStatusBuku_${item.id}" class="badge py-2 px-3 rounded-pill ${item.tersedia ? "text-bg-success" : "text-bg-danger"}">
-                        ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
-                    </span>
-                </td>
-                <td class="d-flex gap-3 justify-content-center">
-                    <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);"><i class="bi bi-pencil"></i> Update</button>
-                    <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);"><i class="bi bi-trash-fill"></i> Hapus</button>
-                </td>
-
-                <td class="align-middle px-4 text-center">
-                    <div class="form-check form-switch d-flex align-items-center gap-2 justify-content-center">
-                        <input
-                            class="form-check-input status-switch"
-                            type="checkbox"
-                            role="switch"
-                            id="switchStatusBuku_${item.id}"
-                            data-id="${item.id}"
-                            ${item.tersedia ? "checked" : ""}
-                            onchange=(updateStatusBuku(this))
-                        >
-                        <label class="form-check-label text-muted small ${item.tersedia ? "text-success fw-bold" : "text-danger fw-bold"}" for="switchStatusBuku" id="lblStatusBuku_${item.id}">
-                            ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
-                        </label>
-                    </div>
-                </td>
+                <td colspan="5" class="text-center">Belum ada data buku. Silakan tambah buku baru.</td>
             </tr>
-        `).join("");
+        `
+        tbody.innerHTML = htmlRowsKosong
+    } else {
+        try{
+            const htmlRows = hasil.data.map(item => `
+                <tr>
+                    <td class="align-middle">${item.id}</td>
+                    <td class="align-middle text-start">${item.judul}</td>
+                    <td class="align-middle text-start">${item.penulis}</td>
+                    <td class="align-middle">${item.tahun}</td>
+                    <td class="align-middle">${item.genre}</td>
+                    <td class="align-middle">
+                        <span id="spnStatusBuku_${item.id}" class="badge py-2 px-3 rounded-pill ${item.tersedia ? "text-bg-success" : "text-bg-danger"}">
+                            ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
+                        </span>
+                    </td>
+                    <td class="d-flex gap-3 justify-content-center">
+                        <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);"><i class="bi bi-pencil"></i> Update</button>
+                        <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);"><i class="bi bi-trash-fill"></i> Hapus</button>
+                    </td>
 
-        tbody.innerHTML = htmlRows
+                    <td class="align-middle px-4 text-center">
+                        <div class="form-check form-switch d-flex align-items-center gap-2 justify-content-center">
+                            <input
+                                class="form-check-input status-switch"
+                                type="checkbox"
+                                role="switch"
+                                id="switchStatusBuku_${item.id}"
+                                data-id="${item.id}"
+                                ${item.tersedia ? "checked" : ""}
+                                onchange=(updateStatusBuku(this))
+                            >
+                            <label class="form-check-label text-muted small ${item.tersedia ? "text-success fw-bold" : "text-danger fw-bold"}" for="switchStatusBuku" id="lblStatusBuku_${item.id}">
+                                ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
+                            </label>
+                        </div>
+                    </td>
+                </tr>
+            `).join("");
 
-    } catch(error){
-        console.error("Gagal mengambil data buku: ", error);
+            tbody.innerHTML = htmlRows
 
-        Swal.fire({
-            icon: "error",
-            title: "Gagal",
-            text: `Data buku gagal ter-load ${error}`
-        })
+            Swal.fire({
+                icon: "success",
+                title: "Berhasil",
+                text: "Data buku berhasil ter-load ke table",
+                timer: 1500,
+                showConfirmButton: false
+            });
+
+        } catch(error){
+            console.error("Gagal mengambil data buku: ", error);
+
+            Swal.fire({
+                icon: "error",
+                title: "Gagal",
+                text: `Data buku gagal ter-load ${error}`
+            })
+        }
     }
 }
 
@@ -87,9 +100,17 @@ async function getDataBukuID(data){
 
     if (id){
         try{
-            const response = await fetch(`/buku/${id}`)
+            const data_buku = await fetch(`/buku/${id}`);
 
-            if (!response.ok){
+            if(!data_buku) return;
+
+            if (data_buku.status == 401) {
+                localStorage.removeItem("access_token");
+
+                window.location.replace("/login.html");
+            }
+
+            if (!data_buku.ok){
 
                 Swal.fire({
                     icon:"error",
@@ -97,10 +118,10 @@ async function getDataBukuID(data){
                     text: `Buku id ${id} tidak dapat ditemukan`
                 });
 
-                throw new error(`HTTP error! status: ${response.status}`)
+                throw new error(`HTTP error! status: ${data_buku.status}`)
             }
 
-            const result = await response.json()
+            const result = await data_buku.json()
 
             console.log(result.data)
 
@@ -124,18 +145,16 @@ async function getDataBukuID(data){
     }
 }
 
-
-
 async function simpan_buku(data){
     const idVal = document.getElementById("id").value;
     const tahunVal = document.getElementById("tahun").value;
-    console.log("cek id buku : ", idVal)
+    // console.log("cek id buku : ", idVal)
 
-    console.log("cek id buku : ", idVal ? 'ada': 'tidak ada')
+    // console.log("cek id buku : ", idVal ? 'ada': 'tidak ada')
 
-    const test = idVal ? parseInt(idVal, 10) : null;
+    // const test = idVal ? parseInt(idVal, 10) : null;
 
-    console.log(test ? "PUT" : "POST");
+    // console.log(test ? "PUT" : "POST");
 
     if(!tahunVal || tahunVal.length !== 4){
         Swal.fire({
@@ -162,13 +181,15 @@ async function simpan_buku(data){
     const method = id ? "PUT" : "POST";
 
     try{
-        const response = await fetch(url, {
+        const response = await cek_auth_token(url, {
             method: method,
-            headers: {
-                "Content-Type": "application/json"
-            },
+            // headers: {
+            //     "Content-Type": "application/json"
+            // },
             body: JSON.stringify(data_buku)
         });
+
+        if(!response) return;
 
         if(response.ok){
             await Swal.fire({
@@ -330,3 +351,50 @@ async function updateStatusBuku(data){
     }
 }
 
+async function logout(){
+    
+    const get_token = localStorage.getItem("access_token");
+    
+    if(!get_token){
+        window.location.replace("/login.html")
+        return;
+    }
+
+    const confirmModal = await Swal.fire({
+        title: "Apakah anda yakin ingin logout?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Ya, Logout!',
+        cancelButtonText: 'Batal'
+    });
+
+    if (!confirmModal.isConfirmed) return;
+
+    try{
+        const response = await fetch("/logout", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${get_token}`
+            }
+        });
+
+        localStorage.removeItem("access_token");
+
+        await Swal.fire({
+            icon: "success",
+            title: "Logout berhasil",
+            text: "Anda sudah logout",
+            timer: 2000,
+            showConfirmButton: false
+        });
+
+        window.location.replace("/login.html");
+    } catch(error){
+        console.error("Error logout:", error);
+
+        localStorage.removeItem("access_token");
+        window.location.replace("/login.html");
+    }
+}
