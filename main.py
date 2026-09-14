@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from routers.buku import router_buku
+from routers.user import router_user
 
 from fastapi.staticfiles import StaticFiles
 
@@ -19,6 +20,7 @@ async def set_Format_JSON_Handler(request: Request, exc: HTTPException):
     )
 
 app.include_router(router_buku)
+app.include_router(router_user)
 
 origins = [
     "http://127.0.0.1:8000",
