@@ -76,8 +76,8 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 ### 1. Clone Repo
 
 ```bash
-  git clone https://github.com/dams-code/manajemen-buku-api.git
-  cd manajemen-buku-api
+  git clone https://github.com/dams-code/manajemen-buku-api-oauth2.git
+  cd manajemen-buku-api-oauth2
 ```
 
 ### 2. Membuat Virtual Environment(env)
@@ -97,6 +97,7 @@ Jika memakai Linux / Mac:
 
 ```bash
   pip install "fastapi[standard]"
+  pip install "pwdlib[argon2, bcrypt]"
 ```
 
 ### 4. Eksekusi FastAPI Server
