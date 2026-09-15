@@ -100,15 +100,15 @@ async function getDataBukuID(data){
 
     if (id){
         try{
-            const data_buku = await fetch(`/buku/${id}`);
+            const data_buku = await cek_auth_token(`/buku/${id}`);
 
             if(!data_buku) return;
 
-            if (data_buku.status == 401) {
-                localStorage.removeItem("access_token");
+            // if (data_buku.status == 401) {
+            //     localStorage.removeItem("access_token");
 
-                window.location.replace("/login.html");
-            }
+            //     window.location.replace("/login.html");
+            // }
 
             if (!data_buku.ok){
 
@@ -254,9 +254,11 @@ async function hapusBuku(data){
 
     if (result.isConfirmed){
         try{
-            const response = await fetch(`/buku/${id}`, {
+            const response = await cek_auth_token(`/buku/${id}`, {
                 method: "DELETE"
             });
+
+            if(!response) return;
 
             if(response.ok){
                 await Swal.fire({
@@ -316,9 +318,11 @@ async function updateStatusBuku(data){
     data.disabled = true;
 
     try{
-        const response = await fetch(`/buku/${id}?tersedia=${cekSwitch}`, {
+        const response = await cek_auth_token(`/buku/${id}?tersedia=${cekSwitch}`, {
             method: 'PATCH'
         });
+
+        if(!response) return;
 
         if(!response.ok){
             throw new Error(`Gagal mengganti status buku id ${id}`)
