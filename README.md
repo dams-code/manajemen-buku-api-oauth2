@@ -33,9 +33,15 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
   <table border="0" style="border-collapse: collapse; border: none;">
     <tr>
       <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/login-user.png" alt="Tampilan Buku Awal" width="80%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <img src="frontend/dokumentasi/login-user.png" alt="Tampilan Buku Awal" width="60%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         <p align="center">
-          <sub>Tampilan revisi halaman login manajemen Buku</sub>
+          <sub>Tampilan halaman login manajemen Buku</sub>
+        </p>
+      </td>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/registrasi-user.png" alt="Tampilan Buku Awal" width="60%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan halaman registrasi user manajemen Buku</sub>
         </p>
       </td>
     </tr>
