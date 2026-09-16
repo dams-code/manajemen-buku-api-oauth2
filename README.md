@@ -8,7 +8,8 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
  - ✅ APIRouter
  - ✅ Modular Structure
  - ✅ OAuth2 (Non-JWT) (Login User dan Handle CRUD Data Buku)
- - ⬜️ Registrasi User (On-Progress)
+ - ✅ Registrasi User
+ - ⬜️ Proses Edit Profile User (On-Progress)
 
 ## Tech Stack
 
@@ -60,6 +61,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 |---|---|---|
 | POST | `/login` | Login user |
 | POST | `/logout` | Logout user |
+| POST | `/registrasi` | Registrasi user |
 ---
 
 ### User
@@ -68,6 +70,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 |---|---|---|
 | GET | `/user` | Mendapatkan semua user |
 | GET | `/user?id=&username=` | Mendapatkan user berdasarkan ID atau berdasarkan username dan bisa keduanya dengan Query Parameter |
+| GET | `/user/aktif` | Load data user ke halaman utama manajemen buku |
 
 ---
 
