@@ -1,5 +1,5 @@
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Path
 from repositories.user import *
 from schemas.user import ResultUser, UserBase
 
@@ -24,3 +24,13 @@ async def get_user(id: Annotated[int, Query()] = None, username: Annotated[str, 
 async def logout(token: Annotated[str, Depends(oauth2_scheme)]):
     
     return await result_logout(token=token)
+
+@router_user.post("/registrasi")
+async def registrasi(registrasi_user: User):
+
+    return await result_registrasi(registrasi_user)
+
+@router_user.get("/user/aktif", response_model=ResultUser[UserBase])
+async def get_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
+
+    return await result_get_user_id(token=token)

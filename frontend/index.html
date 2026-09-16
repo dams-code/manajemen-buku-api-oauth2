@@ -36,8 +36,9 @@
             
             <ul class="nav nav-tabs">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="javascript:void(0)" role="button" aria-expanded="false">
-                        User
+                    <a class="nav-link dropdown-toggle d-flex gap-2 align-items-center" data-bs-toggle="dropdown" role="button" aria-expanded="false" href="javascript:void(0);">
+                        <span id="userAktif"></span>
+                        <span id="userRoleAktif" class="badge bg-secondary"></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li><a class="dropdown-item" href="javascript:void(0)">Edit User</a></li>
@@ -160,6 +161,8 @@
     <div class="batas"></div>
 
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
-    <script src="js/custom.js"></script>
+    <script src="js/sesi_user_aktif.js"></script>
+    <script src="js/buku.js"></script>
+    <script src="js/logout.js"></script>
 </body>
 </html>
