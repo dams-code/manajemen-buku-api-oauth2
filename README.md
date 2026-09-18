@@ -6,7 +6,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 
  - ✅ FastAPI
  - ✅ APIRouter
- - ✅ Modular Structure
+ - ✅ Layered Structure
  - ✅ OAuth2 (Non-JWT) (Login User dan Handle CRUD Data Buku)
  - ✅ Registrasi User
  - ⬜️ Proses Edit Profile User (On-Progress)
