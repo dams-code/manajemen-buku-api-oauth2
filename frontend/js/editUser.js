@@ -86,6 +86,7 @@ async function updateUser(e){
                 text: `${errorDetail.detail} | Gagal update user terjadi error.`
             });
         }
+
     } catch(error){
         console.error("Error Update User", error)
 
@@ -95,6 +96,4 @@ async function updateUser(e){
             text: `TIdak dapat terhubung ke FastAPI endpoint`
         });
     }
-
-
 }

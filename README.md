@@ -9,7 +9,8 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
  - ✅ Layered Structure
  - ✅ OAuth2 (Non-JWT) (Login User dan Handle CRUD Data Buku)
  - ✅ Registrasi User
- - ⬜️ Proses Edit Profile User (On-Progress)
+ - ✅ Edit Profile User
+ - ⬜️ Ganti Password User (On-Progress)
 
 ## Tech Stack
 
@@ -33,15 +34,21 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
   <table border="0" style="border-collapse: collapse; border: none;">
     <tr>
       <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/login-user.png" alt="Tampilan Buku Awal" width="60%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <img src="frontend/dokumentasi/login-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         <p align="center">
           <sub>Tampilan halaman login manajemen Buku</sub>
         </p>
       </td>
       <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/registrasi-user.png" alt="Tampilan Buku Awal" width="60%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <img src="frontend/dokumentasi/registrasi-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         <p align="center">
           <sub>Tampilan halaman registrasi user manajemen Buku</sub>
+        </p>
+      </td>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/edit-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan halaman edit user manajemen Buku</sub>
         </p>
       </td>
     </tr>
@@ -77,6 +84,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 | GET | `/user` | Mendapatkan semua user |
 | GET | `/user?id=&username=` | Mendapatkan user berdasarkan ID atau berdasarkan username dan bisa keduanya dengan Query Parameter |
 | GET | `/user/aktif` | Load data user ke halaman utama manajemen buku |
+| PUT | `/user/update/{username}` | Edit data user dengan data user wajib sama dengan user yang sedang aktif.
 
 ---
 
