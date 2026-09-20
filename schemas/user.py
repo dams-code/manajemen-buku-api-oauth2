@@ -15,6 +15,10 @@ class User(UserBase):
 class UserInDB(UserBase):
     hash_password: str
 
+class UserUpdate(BaseModel):
+    nama: Optional[str] = None
+    role: Optional[str] = None 
+
 class ResultUser(BaseModel, Generic[T]):
     status: int
     pesan: str

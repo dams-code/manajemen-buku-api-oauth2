@@ -1,9 +1,6 @@
-from helpers.security import verify_access_token
 from schemas.user import ResultUser
-from schemas.user import UserBase
-from schemas.user import UserInDB
+from helpers.security import verify_access_token
 from fastapi.encoders import jsonable_encoder
-from schemas.user import *
 from helpers.security import create_access_token
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -141,8 +138,7 @@ async def result_logout(token: str) -> ResultUser[None]:
 
     return ResultUser[None](
         status=status.HTTP_200_OK,
-        pesan=f"Anda sudah logout",
-        data_user=None
+        pesan=f"Anda sudah logout"
     )
 
 async def result_registrasi(registrasi_user: User) :
@@ -186,6 +182,77 @@ async def result_registrasi(registrasi_user: User) :
         "pesan": "Registrasi User Berhasil",
         "data": response_data_user
     }
+
+
+async def result_update_user(username: str, update_user: UserUpdate, token: str | None=None)-> ResultUser[None]:
+
+    if token is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Token tidak ada / wajib disertakan",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    cek_username_aktif = verify_access_token(token, 3600)
+
+    if cek_username_aktif.lower() != username.lower():
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Username tidak sama dengan username yang aktif saat ini"
+        )
+
+    user = next((user for user in data_user if user["username"].lower() == username.lower()), None)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {username} tidak ditemukan"
+        )
+
+    data_update_user =update_user.model_dump(exclude_unset=True)
+
+    user.update(data_update_user)
+
+    return ResultUser[None](
+        status=status.HTTP_200_OK,
+        pesan=f"Update data user {username} berhasil"
+    )
+
+async def result_update_password_user(username: str, update_password: str, token: str | None=None) -> ResultUser[None]:
+
+    if token is None:
+        raise HTTPException(
+            status_code = status.HTTP_401_UNAUTHORIZED,
+            detail="Token tidak ada / wajib disertakan",
+            headers={"WWW-Authenticate": "Bearer"}
+        )
+
+    cek_username_aktif = verify_access_token(token, 3600)
+
+    if cek_username_aktif.lower() != username.lower():
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Username tidak sama dengan username yang aktif saat ini"
+        )
+
+
+    user = next((user for user in data_user if user["username"] == username), None)
+    
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {username} tidak ditemukan"
+        )
+
+    hashed_password = get_password_hash(update_password)
+
+    user["password"] = hashed_password
+
+    return ResultUser[None](
+        status=status.HTTP_200_OK,
+        pesan=f"Update Password User {username} Berhasil"
+    )
 
 
 
