@@ -1,3 +1,5 @@
+from schemas.user import UpdatePasswordUser
+from fastapi.exception_handlers import http_exception_handler
 from schemas.user import ResultUser
 from helpers.security import verify_access_token
 from fastapi.encoders import jsonable_encoder
@@ -198,7 +200,8 @@ async def result_update_user(username: str, update_user: UserUpdate, token: str 
     if cek_username_aktif.lower() != username.lower():
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Username tidak sama dengan username yang aktif saat ini"
+            detail="Username tidak sama dengan username yang aktif saat ini",
+            headers={"WWW-Authenticate": "Bearer"}
         )
 
     user = next((user for user in data_user if user["username"].lower() == username.lower()), None)
@@ -218,7 +221,7 @@ async def result_update_user(username: str, update_user: UserUpdate, token: str 
         pesan=f"Update data user {username} berhasil"
     )
 
-async def result_update_password_user(username: str, update_password: str, token: str | None=None) -> ResultUser[None]:
+async def result_update_password_user(username: str, data_password: UpdatePasswordUser, token: str | None=None) -> ResultUser[None]:
 
     if token is None:
         raise HTTPException(
@@ -231,31 +234,33 @@ async def result_update_password_user(username: str, update_password: str, token
 
     if cek_username_aktif.lower() != username.lower():
         raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Username tidak sama dengan username yang aktif saat ini"
+            status_code = status.HTTP_401_UNAUTHORIZED,
+            detail="Username tidak sama dengan username yang aktif saat ini",
+            headers={"WWW-Authenticate": "Bearer"}
         )
 
-
-    user = next((user for user in data_user if user["username"] == username), None)
-    
+    user = next((user for user in data_user if user["username"].lower() == cek_username_aktif.lower()), None)
 
     if user is None:
         raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail=f"User {username} tidak ditemukan"
+            status_code = status.HTTP_404_NOT_FOUND,
+            detail=f"Username {username} tidak ditemukan"
         )
 
-    hashed_password = get_password_hash(update_password)
+    if not verify_password(data_password.passwordLama, user["hash_password"]):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password yang diinput tidak sesuai dengan password lama"
+        )
 
-    user["password"] = hashed_password
+    password_baru = get_password_hash(data_password.passwordBaru)
+
+    user["hash_password"] = password_baru
 
     return ResultUser[None](
         status=status.HTTP_200_OK,
-        pesan=f"Update Password User {username} Berhasil"
+        pesan=f"Password {username} berhasil ter-update"
     )
-
-
-
 
 
 

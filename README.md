@@ -10,7 +10,8 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
  - ✅ OAuth2 (Non-JWT) (Login User dan Handle CRUD Data Buku)
  - ✅ Registrasi User
  - ✅ Edit Profile User
- - ⬜️ Ganti Password User (On-Progress)
+ - ✅ Ganti Password User
+ - ⬜️ RBAC - Role Based Access (On-Progress)
 
 ## Tech Stack
 
@@ -51,6 +52,12 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
           <sub>Tampilan halaman edit user manajemen Buku</sub>
         </p>
       </td>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/ganti-password-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan halaman ganti password user manajemen Buku</sub>
+        </p>
+      </td>
     </tr>
   </table>
 
@@ -85,6 +92,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 | GET | `/user?id=&username=` | Mendapatkan user berdasarkan ID atau berdasarkan username dan bisa keduanya dengan Query Parameter |
 | GET | `/user/aktif` | Load data user ke halaman utama manajemen buku |
 | PUT | `/user/update/{username}` | Edit data user dengan data user wajib sama dengan user yang sedang aktif.
+| PUT | `/user/update/password/{username}` | Ganti password user dengan syarat user wajib sama dengan user yang sedang aktif.
 
 ---
 

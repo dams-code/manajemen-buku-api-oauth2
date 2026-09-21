@@ -19,6 +19,10 @@ class UserUpdate(BaseModel):
     nama: Optional[str] = None
     role: Optional[str] = None 
 
+class UpdatePasswordUser(BaseModel):
+    passwordLama: str
+    passwordBaru: str
+
 class ResultUser(BaseModel, Generic[T]):
     status: int
     pesan: str

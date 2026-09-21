@@ -1,3 +1,4 @@
+from schemas.user import UpdatePasswordUser
 from repositories.user import result_update_user
 from schemas.user import UserUpdate
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
@@ -41,6 +42,6 @@ async def get_user_id(token: Annotated[str, Depends(oauth2_scheme)]):
 async def update_user(username: str, update_user: UserUpdate, token: Annotated[str, Depends(oauth2_scheme)] = None):
     return await result_update_user(username, update_user, token)
 
-router_user.put("/user/update/password")
-async def update_password(username: str, update_password: str, token: Annotated[str, Depends(oauth2_scheme)]):
-    return await result_update_password_user(username, update_password=update_password, token=token)
+@router_user.put("/user/update/password/{username}")
+async def update_password(username: str, data_password: UpdatePasswordUser, token: Annotated[str, Depends(oauth2_scheme)]):
+    return await result_update_password_user(username, data_password, token)

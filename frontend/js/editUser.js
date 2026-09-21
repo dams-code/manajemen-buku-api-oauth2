@@ -85,6 +85,7 @@ async function updateUser(e){
                 title: "Gagal",
                 text: `${errorDetail.detail} | Gagal update user terjadi error.`
             });
+            return;
         }
 
     } catch(error){
