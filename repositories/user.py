@@ -1,15 +1,14 @@
-from schemas.user import UpdatePasswordUser
-from fastapi.exception_handlers import http_exception_handler
-from schemas.user import ResultUser
 from helpers.security import verify_access_token
 from fastapi.encoders import jsonable_encoder
 from helpers.security import create_access_token
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from schemas.user import *
+from schemas.roles import *
 from models.token import *
 from helpers.helper_password_user import verify_password, get_password_hash
 from helpers.security import *
+from fastapi import Depends
 
 # import secrets
 
@@ -261,7 +260,5 @@ async def result_update_password_user(username: str, data_password: UpdatePasswo
         status=status.HTTP_200_OK,
         pesan=f"Password {username} berhasil ter-update"
     )
-
-
 
 

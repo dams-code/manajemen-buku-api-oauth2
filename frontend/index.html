@@ -67,7 +67,7 @@
         <div class="row col-md-12 mt-3">
 
             <div class="text-end mb-3">
-                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" onclick="setTambahBuku();">
+                <button class="btn btn-primary" id="btnTambahBuku" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" onclick="setTambahBuku();">
                     <i class="bi bi-journal-plus"></i> Tambah Buku
                 </button>
             </div>
@@ -160,7 +160,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" onclick="simpan_buku();">Simpan</button>
+                    <button type="submit" class="btn btn-primary" onclick="simpan_buku();" id="btnSimpanBuku">Simpan</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </div>

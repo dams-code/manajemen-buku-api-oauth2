@@ -20,6 +20,11 @@ async function getBuku(){
         tbody.innerHTML = htmlRowsKosong
     } else {
         try{
+
+            const user = await cek_auth_token(`/user/aktif`);
+            const hasil_user = await user.json();
+            const cekManajer = hasil_user.data_user.role === "manajer";
+
             const htmlRows = hasil.data.map(item => `
                 <tr>
                     <td class="align-middle">${item.id}</td>
@@ -32,29 +37,47 @@ async function getBuku(){
                             ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
                         </span>
                     </td>
-                    <td class="d-flex gap-3 justify-content-center">
-                        <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);"><i class="bi bi-pencil"></i> Update</button>
-                        <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);"><i class="bi bi-trash-fill"></i> Hapus</button>
-                    </td>
+                    ${!cekManajer ? `
+                        <td class="d-flex gap-3 justify-content-center">
+                            <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);" id="btnEditBuku"><i class="bi bi-pencil"></i> Update</button>
+                            <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);" id="btnHapusBuku"><i class="bi bi-trash-fill"></i> Hapus</button>
+                        </td>` : `<td class="align-middle"><span>&nbsp;</span></td>`
+                    }
+                    
 
                     <td class="align-middle px-4 text-center">
-                        <div class="form-check form-switch d-flex align-items-center gap-2 justify-content-center">
-                            <input
-                                class="form-check-input status-switch"
-                                type="checkbox"
-                                role="switch"
-                                id="switchStatusBuku_${item.id}"
-                                data-id="${item.id}"
-                                ${item.tersedia ? "checked" : ""}
-                                onchange=(updateStatusBuku(this))
-                            >
-                            <label class="form-check-label text-muted small ${item.tersedia ? "text-success fw-bold" : "text-danger fw-bold"}" for="switchStatusBuku" id="lblStatusBuku_${item.id}">
-                                ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
-                            </label>
-                        </div>
+                        ${!cekManajer ?
+                            `
+                                <div class="form-check form-switch d-flex align-items-center gap-2 justify-content-center">
+                                    <input
+                                        class="form-check-input status-switch"
+                                        type="checkbox"
+                                        role="switch"
+                                        id="switchStatusBuku_${item.id}"
+                                        data-id="${item.id}"
+                                        ${item.tersedia ? "checked" : ""}
+                                        onchange=(updateStatusBuku(this))
+                                    >
+                                    <label class="form-check-label text-muted small ${item.tersedia ? "text-success fw-bold" : "text-danger fw-bold"}" for="switchStatusBuku" id="lblStatusBuku_${item.id}">
+                                        ${item.tersedia ? "Tersedia" : "Tidak tersedia"}
+                                    </label>
+                                </div>
+                            ` : `<span>&nbsp;</span>`
+                        }
+                        
                     </td>
                 </tr>
             `).join("");
+            
+            // console.log(hasil_user)
+
+            const btnTambahBuku = document.getElementById("btnTambahBuku");
+            
+            if (cekManajer){
+                btnTambahBuku.style.display = "none";
+            } else {
+                btnTambahBuku.style.display = "inline-block";
+            }
 
             tbody.innerHTML = htmlRows
 

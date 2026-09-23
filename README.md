@@ -2,16 +2,29 @@
 
 Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 
+## Topik sebelum OAuth2 ([link](~/manajemen-buku-api))
+
+- FastAPI
+- Path / Query Parameters
+- Pydantic BaseModel
+- Request Body
+- In-Memory Data (Python List)
+- Filtering dan CRUD
+- HTTPException
+- jsonable_encoder
+- JSONResponse
+- Non-Database
+
 ## Topik Lanjutan (On-Progress)
 
- - ✅ FastAPI
  - ✅ APIRouter
  - ✅ Layered Structure
  - ✅ OAuth2 (Non-JWT) (Login User dan Handle CRUD Data Buku)
  - ✅ Registrasi User
  - ✅ Edit Profile User
  - ✅ Ganti Password User
- - ⬜️ RBAC - Role Based Access (On-Progress)
+ - ✅ RBAC - Role Based Access
+ - ⬜️ Perbaikan Layout dan Membuat (CRUD User - yang dapat melakukan role manajer) (On-Progress)
 
 ## Tech Stack
 
@@ -64,9 +77,32 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
   <table border="0" style="border-collapse: collapse; border: none;">
     <tr>
       <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-revisi-halaman-buku-v2.png" alt="Tampilan Buku Awal" width="80%" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <img src="frontend/dokumentasi/sesi-habis.png" alt="Tampilan Buku Awal" width="500px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
         <p align="center">
-          <sub>Tampilan revisi halaman manajemen Buku</sub>
+          <sub>Tampilan halaman Sesi User Habis</sub>
+        </p>
+      </td>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/handle-batas-akses-user.png" alt="Tampilan Buku Awal" width="500px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan halaman saat akses user ditolak</sub>
+        </p>
+      </td>
+    </tr>
+  </table>
+
+  <table border="0" style="border-collapse: collapse; border: none;">
+    <tr>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/hasil-revisi-halaman-buku-v2.png" alt="Tampilan Buku Awal" width="600px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan halaman manajemen Buku</sub>
+        </p>
+      </td>
+      <td align="center" style="padding: 15px; border: none;">
+        <img src="frontend/dokumentasi/role-akses-user.png" alt="Tampilan Buku Awal" width="600px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+        <p align="center">
+          <sub>Tampilan role manajer pada halaman manajemen Buku</sub>
         </p>
       </td>
     </tr>
@@ -124,6 +160,72 @@ def get_password_hash(password: str)-> str:
     return set_hash.hash(password)
 ```
 
+### `RBAC (Role Base Access pada User)`
+
+Pada kode disisi router buku, ada tambahan penjagaan untuk menghandle akses user.
+Dimana pada manajer hanya dapat mengakses get all buku, atau get buku by Id,
+untuk admin dapat melakukan crud buku secara keseluruhan.
+
+```bash
+@router_buku.get("", response_model=ResultBuku[BukuBase | list[BukuBase]], dependencies=[Depends(CekRole([Roles.ADMIN, Roles.MANAJER]))])
+
+.....
+
+@router_buku.put("/{id}", response_model=ResultBuku[BukuBase], dependencies=[Depends(CekRole([Roles.ADMIN]))])
+
+```
+
+Untuk proses Cek Role pada user. ([kode cek role user](repositories/roles.py))
+
+```bash
+class CekRole:
+    def __init__(self, roles: list[Roles]):
+        self.roles = roles
+
+    def __call__(self, user_role: ResultUser[UserBase] = Depends(get_role_user)):
+
+        user_role = user_role.data_user
+
+        if not user_role or user_role.role not in self.roles:
+
+            raise HTTPException(
+                status_code = status.HTTP_403_FORBIDDEN,
+                detail=f"Akses ditolak, Halaman ini dapat diakses user dengan role : {[r.value for r in self.roles]}"
+            )
+
+        return user_role
+
+```
+
+### Perbedaan pada router buku sebelum RBAC dan sesudah RBAC.
+
+<div style="display: flex; gap: 20px; width: 100%;"> 
+  <div style="flex: 1; background-color: #000000; border: 1px solid #feb2b2; padding: 16px; border-radius: 8px;">
+    <h3 style="color: #c53030; margin-top: 0;">Sebelum</h3>
+
+```python
+@router_buku.put("/{id}", response_model=ResultBuku[BukuBase])
+async def update_buku(id: Annotated[int, Path(description="Update Id Buku", gt=0)], buku: Buku, token: Annotated[str, Depends(oauth2_scheme)] = None):
+  return await result_update_buku(id=id, buku=buku, token=token)
+```
+  </div>
+    <div style="flex: 1; background-color: #000000; border: 1px solid #9ae6b4; padding: 16px; border-radius: 8px; color: #1b1b1b;">
+      <h3 style="color: #276749; margin-top: 0;">Sesudah</h3>
+    
+```python
+@router_buku.put("/{id}", response_model=ResultBuku[BukuBase], dependencies=[Depends(CekRole([Roles.ADMIN]))])
+async def update_buku(id: Annotated[int, Path(description="Update Id Buku", gt=0)], buku: Buku):
+  return await result_update_buku(id=id, buku=buku)
+```
+  </div>
+</div>
+
+<br/>
+
+**Untuk RBAC konsep ini saya coba tiru konsepnya dari repo github :** [RBAC-FastAPI](https://github.com/jurabekaminov/RBAC-FastAPI/tree/main)
+
+<br/>
+
 ## Endpoints
 
 ### Buku
@@ -156,6 +258,7 @@ endpoint get_buku pada router "/buku" ini mengirim request ke sisi logic reposit
 yang didalamnya terdapat validasi untuk cek token (expired / token belum ada).
 
 - Kode dibawah ini endpoint dari "/buku" (Method: GET), bisa cek kodenya disini [buku.py](routers/buku.py)
+
 ```bash
 router_buku = APIRouter(prefix="/buku", tags=["buku"])
 

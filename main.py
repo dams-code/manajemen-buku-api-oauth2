@@ -1,6 +1,6 @@
-from fastapi import FastAPI, Request, HTTPException
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, HTMLResponse
 from routers.buku import router_buku
 from routers.user import router_user
 
@@ -10,6 +10,13 @@ app = FastAPI()
 
 @app.exception_handler(HTTPException)
 async def set_Format_JSON_Handler(request: Request, exc: HTTPException):
+    
+    # if exc.status_code == status.HTTP_403_FORBIDDEN:
+    #     with open("403.html", "r", encoding="utf-8") as f:
+    #         html_file = f.read();
+
+    #         return HTMLResponse(content=html_file, status_code= status.HTTP_403_FORBIDDEN)
+    
     return JSONResponse(
         status_code=exc.status_code,
         content={
