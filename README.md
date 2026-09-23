@@ -2,7 +2,7 @@
 
 Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 
-## Topik sebelum OAuth2 ([link](~/manajemen-buku-api))
+## Topik sebelum OAuth2 ([link](https://github.com/dams-code/manajemen-buku-api))
 
 - FastAPI
 - Path / Query Parameters
