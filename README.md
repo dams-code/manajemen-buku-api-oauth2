@@ -409,6 +409,20 @@ kenapa dipisah jadi ada 2 .venv dan .env,
   pip install python-dotenv # untuk open dan extract file env berisi SECRET_KEY
 ```
 
+### 3.1 Install SweetAlert2
+
+1. Masuk ke folder frontend
+
+```bash
+cd frontend
+```
+
+2. Kemudian install Sweetalert2
+
+```bash
+npm install sweetalert2
+```
+
 ### 4. Eksekusi FastAPI Server
 
 Jika memakai UV:
