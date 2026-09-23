@@ -141,7 +141,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 untuk menempelkan timestamp berisikan `(TimestampSigner, SignatureExpired, BadTimeSignature)`,
 bertujuan untuk mengecek apakah token sudah expired atau belum (dengan set waktu yang saya tetapkan di project manajemen buku ini 3600 detik = 1 jam )
 
-```bash
+```python
 GET_SECRET_KEY = os.getenv("SECRET_KEY")
 
 if GET_SECRET_KEY is None:
@@ -153,7 +153,7 @@ signer = TimestampSigner(GET_SECRET_KEY)
 ### `Argon2`
 `Argon2` pada project manajemen buku ini saya gunakan untuk hashed password pada user, dan hasilnya `divalidasi oleh basemodel UserInDB`
 
-```bash
+```python
 set_hash = PasswordHash.recommended()
 
 def get_password_hash(password: str)-> str:
@@ -166,7 +166,7 @@ Pada kode disisi router buku, ada tambahan penjagaan untuk menghandle akses user
 Dimana pada manajer hanya dapat mengakses get all buku, atau get buku by Id,
 untuk admin dapat melakukan crud buku secara keseluruhan.
 
-```bash
+```python
 @router_buku.get("", response_model=ResultBuku[BukuBase | list[BukuBase]], dependencies=[Depends(CekRole([Roles.ADMIN, Roles.MANAJER]))])
 
 .....
@@ -177,7 +177,7 @@ untuk admin dapat melakukan crud buku secara keseluruhan.
 
 Untuk proses Cek Role pada user. ([kode cek role user](repositories/roles.py))
 
-```bash
+```python
 class CekRole:
     def __init__(self, roles: list[Roles]):
         self.roles = roles
@@ -246,7 +246,7 @@ async def update_buku(id: Annotated[int, Path(description="Update Id Buku", gt=0
 Untuk `validasi di sisi frontend` dalam mengakses CRUD Buku, pada project manajemen buku oauth2 ini saya tambahkan `bearer token`.
 dimana saya pasang dibagian `helper/security.py` lihat disini, [security.py](helpers/security.py)
 
-```bash
+```python
 token = signer.sign(username).decode("UTF-8")
 ```
 
@@ -259,7 +259,7 @@ yang didalamnya terdapat validasi untuk cek token (expired / token belum ada).
 
 - Kode dibawah ini endpoint dari "/buku" (Method: GET), bisa cek kodenya disini [buku.py](routers/buku.py)
 
-```bash
+```python
 router_buku = APIRouter(prefix="/buku", tags=["buku"])
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/login")
@@ -272,7 +272,8 @@ async def get_buku(id: Annotated[int | None, Query()] = None, judul: Annotated[s
 ```
 
 - Kode dibawah ini salah satu logic dari `repositories/buku.py`, bisa cek kodenya disini [buku.py](repositories/buku.py)
-```bash
+
+```python
 async def result_get_buku(id: int | None=None, judul: str | None=None, token: str | None=None) -> ResultBuku[BukuBase | list[BukuBase]]:
     
     if token is None:
@@ -289,7 +290,8 @@ async def result_get_buku(id: int | None=None, judul: str | None=None, token: st
 Jadi `jika token` expired atau token belum ada sama sekali `proses CRUD Buku akan distop` dan di kembalikan ke `login.html`
 
 - Kode dibawah ini `validasi dari sisi frontend`, bisa cek kodenya disini [cek_token.js](frontend/js/cek_token.js)
-```bash
+
+```python
 async function cek_auth_token(url, options={}){
   const token = localStorage.getItem('access_token');
 
@@ -331,7 +333,8 @@ async function cek_auth_token(url, options={}){
 ```
 
 Dan `disisi frontend pada get buku`, kodenya pendek, seperti berikut ini:
-```bash
+
+```python
 async function getBuku(){
 
     const data_buku = await cek_auth_token("/buku");
@@ -378,7 +381,7 @@ kita buat file `.env` untuk menyimpan **SECRET_KEY** -nya.
 
 load hasil `.env` tadi dengan kode berikut ini. (kode bisa dilihat pada link ini [security.py](helpers/security.py)) 
 
-```bash
+```python
 from dotenv import load_dotenv
 import os
 
