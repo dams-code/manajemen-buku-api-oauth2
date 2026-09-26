@@ -1,14 +1,12 @@
 from helpers.security import verify_access_token
+from helpers.security import *
 from fastapi.encoders import jsonable_encoder
-from helpers.security import create_access_token
 from fastapi import HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from schemas.user import *
 from schemas.roles import *
 from models.token import *
 from helpers.helper_password_user import verify_password, get_password_hash
-from helpers.security import *
-from fastapi import Depends
 
 # import secrets
 
@@ -21,6 +19,13 @@ data_user = [
         "nama": "user test 1",
         "hash_password": get_password_hash("test1"),
         "role": "admin"
+    },
+    {
+        "id": 2,
+        "username": "test2",
+        "nama": "user test 2",
+        "hash_password": get_password_hash("test2"),
+        "role": "manajer"
     }
 ]
 
@@ -69,18 +74,18 @@ async def result_login(form_data: OAuth2PasswordRequestForm) -> ResultUser[UserB
         )
     )
 
-async def result_get_user(id: int | None, username: str | None, token: str | None) -> ResultUser[UserBase | list[UserBase]]:
+async def result_get_user(id: int | None, username: str | None) -> ResultUser[UserResponse | list[UserResponse]]:
 
-    if not token:
-        raise HTTPException(
-            status_code= status.HTTP_401_UNAUTHORIZED,
-            detail="Token tidak ada / wajib disertakan",
-            headers={"WWW-Authenticate": "Bearer"}
-        )
+    # if not token:
+    #     raise HTTPException(
+    #         status_code= status.HTTP_401_UNAUTHORIZED,
+    #         detail="Token tidak ada / wajib disertakan",
+    #         headers={"WWW-Authenticate": "Bearer"}
+    #     )
 
     # cek_username_aktif = next((user for user in data_user if user["username"].lower() == temp_token.get(token, "").lower()), None)
 
-    cek_username_aktif  = verify_access_token(token, 3600)
+    # cek_username_aktif  = verify_access_token(token, 3600)
 
     if id is not None or username is not None:
         result_data_user = next((user for user in data_user if (id is None or user["id"] == id) and (username is None or user["username"].lower() == username.lower()) ), None)
@@ -91,21 +96,21 @@ async def result_get_user(id: int | None, username: str | None, token: str | Non
                 detail=f"User id {id} tidak ditemukan"
             )
 
-        return ResultUser[UserBase](
+        return ResultUser[UserResponse](
             status= status.HTTP_200_OK,
             pesan= f"Data user id {result_data_user['id']} - username {result_data_user['username']} berhasil terload",
-            data_user= UserBase(**result_data_user)
+            data_user= UserResponse(**result_data_user)
         )
 
-    list_user = [UserBase(**user) for user in data_user]
+    list_user = [UserResponse(**user) for user in data_user]
 
-    return ResultUser[list[UserBase]](
+    return ResultUser[list[UserResponse]](
         status=status.HTTP_200_OK,
         pesan=f"User berhasil terload (total {len(list_user)} user)",
         data_user=list_user
     )
 
-async def result_get_user_id(token: str)-> ResultUser[UserBase]:
+async def result_get_user_aktif(token: str)-> ResultUser[UserBase]:
     
     if token is None:
         raise HTTPException(
@@ -128,6 +133,22 @@ async def result_get_user_id(token: str)-> ResultUser[UserBase]:
         status=status.HTTP_200_OK,
         pesan=f"Data user {cek_username_aktif} ditemukan",
         data_user=UserBase(**get_data_username)
+    )
+
+async def result_get_user_id(username: str)-> ResultUser[UserResponse]:
+    
+    get_data_username = next((user for user in data_user if user["username"].lower() == username.lower()),None)
+
+    if get_data_username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username tidak ada / belum registrasi"
+        )
+
+    return ResultUser[UserResponse](
+        status=status.HTTP_200_OK,
+        pesan=f"Data user {username} ditemukan",
+        data_user=UserResponse(**get_data_username)
     )
 
 
@@ -180,12 +201,12 @@ async def result_registrasi(registrasi_user: User) :
 
     return {
         "status": status.HTTP_200_OK,
-        "pesan": "Registrasi User Berhasil",
+        "pesan": "Registrasi / Pendaftaran User Berhasil",
         "data": response_data_user
     }
 
 
-async def result_update_user(username: str, update_user: UserUpdate, token: str | None=None)-> ResultUser[None]:
+async def result_update_user_aktif(username: str, update_user: UserUpdate, token: str | None=None)-> ResultUser[None]:
 
     if token is None:
         raise HTTPException(
@@ -202,6 +223,25 @@ async def result_update_user(username: str, update_user: UserUpdate, token: str 
             detail="Username tidak sama dengan username yang aktif saat ini",
             headers={"WWW-Authenticate": "Bearer"}
         )
+
+    user = next((user for user in data_user if user["username"].lower() == username.lower()), None)
+
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"User {username} tidak ditemukan"
+        )
+
+    data_update_user =update_user.model_dump(exclude_unset=True)
+
+    user.update(data_update_user)
+
+    return ResultUser[None](
+        status=status.HTTP_200_OK,
+        pesan=f"Update data user {username} berhasil"
+    )
+
+async def result_update_user(username: str, update_user: UserUpdate)-> ResultUser[None]:
 
     user = next((user for user in data_user if user["username"].lower() == username.lower()), None)
 
@@ -261,4 +301,27 @@ async def result_update_password_user(username: str, data_password: UpdatePasswo
         pesan=f"Password {username} berhasil ter-update"
     )
 
+async def result_delete_user(username: str, token: str | None=None)-> ResultUser[None]:
 
+    cek_username_aktif = verify_access_token(token, 3600)
+
+    if cek_username_aktif == username:
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST,
+            detail="User yang dihapus hanya boleh user yang tidak sedang login saat ini"
+        )
+
+    cek_index_username = next((index for index, user in enumerate(data_user) if user["username"] == username), None)
+
+    if cek_index_username is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Username {username} tidak ditemukan"
+        )
+
+    del data_user[cek_index_username]
+
+    return ResultUser[None](
+        status=status.HTTP_200_OK,
+        pesan="Username {username} berhasil dihapus"
+    )

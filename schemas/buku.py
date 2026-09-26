@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from typing import Union, Generic, TypeVar, Optional
+from typing import Generic, TypeVar, Optional
 
 T = TypeVar("T")
 

@@ -15,7 +15,11 @@ class User(UserBase):
 class UserInDB(UserBase):
     hash_password: str
 
+class UserResponse(UserBase):
+    id: int
+
 class UserUpdate(BaseModel):
+    id: int
     nama: Optional[str] = None
     role: Optional[str] = None 
 

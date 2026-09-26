@@ -15,7 +15,7 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 - JSONResponse
 - Non-Database
 
-## Topik Lanjutan (On-Progress)
+## Topik Lanjutan
 
  - ✅ APIRouter
  - ✅ Layered Structure
@@ -24,7 +24,9 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
  - ✅ Edit Profile User
  - ✅ Ganti Password User
  - ✅ RBAC - Role Based Access
- - ⬜️ Perbaikan Layout dan Membuat (CRUD User - yang dapat melakukan role manajer) (On-Progress)
+ - ✅ CRUD Buku (Admin saja, manajer hanya sebagai viewer)
+ - ✅ CRUD Daftar User (Manajer Saja, jika admin mengeklik - akses ditolak dan di redirect ke 403.html)
+ - ✅ Perbaikan Layout dan Membuat (CRUD User - yang dapat melakukan role manajer)
 
 ## Tech Stack
 
@@ -42,72 +44,41 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 ![SweetAlert2](https://img.shields.io/badge/SweetAlert2-8CD4F5?style=for-the-badge&logo=sweetalert2&logoColor=black)
 
 
-## Sekilas Update Halaman Yang Sudah Dikerjakan
+## Update Halaman Yang Sudah Dikerjakan
 
-<div align="center">
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/login-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman login manajemen Buku</sub>
-        </p>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/registrasi-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman registrasi user manajemen Buku</sub>
-        </p>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/edit-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman edit user manajemen Buku</sub>
-        </p>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/ganti-password-user.png" alt="Tampilan Buku Awal" width="400px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman ganti password user manajemen Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
+| **Login User** | **Registrasi User** |
+| :---: | :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/login-user.png" width="100%" height="480px" style="object-fit: cover;"> | <img src="frontend/dokumentasi/registrasi-user.png" width="100%" height="480px" style="object-fit: cover;"></div> |
 
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/sesi-habis.png" alt="Tampilan Buku Awal" width="500px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman Sesi User Habis</sub>
-        </p>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/handle-batas-akses-user.png" alt="Tampilan Buku Awal" width="500px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman saat akses user ditolak</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
+| **Edit User** | **Ganti Password User** |
+| :---: | :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/edit-user.png" width="100%" height="480px" style="object-fit: cover;"> | <img src="frontend/dokumentasi/ganti-password-user.png" width="100%" height="480px" style="object-fit: cover;"></div> |
 
-  <table border="0" style="border-collapse: collapse; border: none;">
-    <tr>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/hasil-revisi-halaman-buku-v2.png" alt="Tampilan Buku Awal" width="600px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan halaman manajemen Buku</sub>
-        </p>
-      </td>
-      <td align="center" style="padding: 15px; border: none;">
-        <img src="frontend/dokumentasi/role-akses-user.png" alt="Tampilan Buku Awal" width="600px" style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-        <p align="center">
-          <sub>Tampilan role manajer pada halaman manajemen Buku</sub>
-        </p>
-      </td>
-    </tr>
-  </table>
-</div>
+| **Sesi User Habis** | **Ganti Password User** |
+| :---: | :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/sesi-habis.png" width="100%" height="480px" style="object-fit: cover;"> | <img src="frontend/dokumentasi/handle-batas-akses-user.png" width="100%" height="480px" style="object-fit: cover;"></div> |
+
+
+| **Halaman Utama** |
+| :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/halaman-utama.png" width="100%" height="480px" style="object-fit: cover;"> |
+| Tampilan Sesi User Habis |
+
+| **Halaman Manajemen Buku** |
+| :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/hasil-revisi-halaman-buku-v2.png" width="100%" style="object-fit: cover;"> |
+
+| **Role Manajer Hanya View pada Manajemen Buku** |
+| :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/role-akses-user.png" width="100%" style="object-fit: cover;"> |
+
+| **Role Manajer pada Manajemen User** |
+| :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/manajemen-user.png" width="100%" style="object-fit: cover;"> |
+
+| **Role Manajer pada Manajemen User** |
+| :---: |
+| <div style="padding:10px;"><img src="frontend/dokumentasi/manajemen-user.png" width="100%" style="object-fit: cover;"> |
 
 ## Endpoints
 
@@ -127,12 +98,27 @@ Endpoint Manajemen buku sederhana menggunakan FastAPI, Tanpa JWT dan Database
 | GET | `/user` | Mendapatkan semua user |
 | GET | `/user?id=&username=` | Mendapatkan user berdasarkan ID atau berdasarkan username dan bisa keduanya dengan Query Parameter |
 | GET | `/user/aktif` | Load data user ke halaman utama manajemen buku |
-| PUT | `/user/update/{username}` | Edit data user dengan data user wajib sama dengan user yang sedang aktif.
+| PUT | `/user/aktif/update/{username}` | endpoint ini digunakan saat user aktif mau edit datanya sendiri (tidak dapat mengedit data user lain) |
+| PUT | `/user/update/{username}` | Edit data user dari sisi manajer `(hanya update nama, role saja)`.
 | PUT | `/user/update/password/{username}` | Ganti password user dengan syarat user wajib sama dengan user yang sedang aktif.
+| POST | `/user` | Sebagai manajer mendaftarkan User Baru
+| DELETE | `/user/{username}` | Sebagai manajer dapat menghapus Data User. (namun jika user manajer sendiri itu akif tidak dapat dihapus oleh dirinya sendiri)
 
 ---
 
-<br/><br/>
+<br/>
+
+### Perbedaan `POST pada /registrasi` dan `POST pada /user`
+---
+Dimana `POST pada /registrasi` ini user dapat melakukan pendaftaran dengan role default atau pilihan tunggal hanya sebagai admin.
+Sedangkan `POST pada /user` ini sebagai manajer dapat mendaftarkan admin baru, ataupun manajer baru.
+
+perbedaan hanya pada pilihan role yang dapat dipilih saat membuat user baru.
+
+`dimana manajer hanya dapat membuat password baru 1 kali untuk user baru, namun jika ingin mengganti password dapat dilakukan oleh user itu sendiri.`
+
+
+<br/>
 
 ## Tambahan pada kode program pada Auth (Non-JWT)
 

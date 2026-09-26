@@ -1,8 +1,7 @@
 from repositories.user import data_user
 from helpers.security import verify_access_token
-from schemas.user import ResultUser
+from schemas.user import *
 from fastapi.security import OAuth2PasswordBearer
-from schemas.user import UserBase
 from fastapi import HTTPException, Depends, status
 from schemas.roles import Roles
 from typing import Annotated

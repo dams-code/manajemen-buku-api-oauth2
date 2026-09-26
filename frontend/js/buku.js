@@ -39,8 +39,8 @@ async function getBuku(){
                     </td>
                     ${!cekManajer ? `
                         <td class="d-flex gap-3 justify-content-center">
-                            <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);" id="btnEditBuku"><i class="bi bi-pencil"></i> Update</button>
-                            <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);" id="btnHapusBuku"><i class="bi bi-trash-fill"></i> Hapus</button>
+                            <button class="btn btn-primary d-flex col-gap-3" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" data-id=${item.id} onclick="getDataBukuID(this);"><i class="bi bi-pencil"></i> Update</button>
+                            <button class="btn btn-outline-danger d-flex col-gap-3" data-id=${item.id} type="button" onclick="hapusBuku(this);"><i class="bi bi-trash-fill"></i> Hapus</button>
                         </td>` : `<td class="align-middle"><span>&nbsp;</span></td>`
                     }
                     
@@ -146,7 +146,7 @@ async function getDataBukuID(data){
 
             const result = await data_buku.json()
 
-            console.log(result.data)
+            // console.log(result.data)
 
             id_input.value = result.data.id
             judul.value = result.data.judul
@@ -168,7 +168,7 @@ async function getDataBukuID(data){
     }
 }
 
-async function simpan_buku(data){
+async function simpan_buku(){
     const idVal = document.getElementById("id").value;
     const tahunVal = document.getElementById("tahun").value;
     // console.log("cek id buku : ", idVal)
@@ -233,7 +233,7 @@ async function simpan_buku(data){
             await getBuku();
         } else {
             const errorDetail = await response.json();
-            console.log(errorDetail.detail)
+            console.error(errorDetail.detail)
             Swal.fire({
                 icon: "error",
                 title: "Gagal",

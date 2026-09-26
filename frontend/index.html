@@ -15,14 +15,49 @@
     <script src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
 
     <style>
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Mencegah scrollbar muncul di sisi layar */
+            margin: 0;
+        }
+
+        .container-fluid{
+            position: relative;
+        }
+
         .batas{
-            border-top: 1px solid #ccc;
-            margin-top: 30px;
             padding-top: 5px;
+            position: absolute;
+            bottom: 20px;
+            width: calc(100% - 100px);
+            height: 10px;
+            background-color: #dadada;
+            border-radius: 10px;
+            transform: translateX(-50%);
+            left: 50%;
+            box-shadow: 2px 2px 5px rgba(69, 69, 69, 0.39);
         }
 
         .navbar-brand p:last-child{
             font-size: 0.815rem;
+        }
+
+        .d-flex .card:first-child a {
+            background-color: #e6edfe;
+        }
+        .d-flex .card:last-child a {
+            background-color: #caf7da;
+        }
+        
+        .col-12{
+            margin-top: 5em;
+        }
+
+        .card a i{
+            display: inline-block;
+            font-size: 4.5em;
         }
     </style>
 
@@ -63,115 +98,30 @@
         </div>
     </nav>
 
-    <div class="container">
-        <div class="row col-md-12 mt-3">
-
-            <div class="text-end mb-3">
-                <button class="btn btn-primary" id="btnTambahBuku" type="button" data-bs-toggle="modal" data-bs-target="#modalbuku" onclick="setTambahBuku();">
-                    <i class="bi bi-journal-plus"></i> Tambah Buku
-                </button>
-            </div>
-
-            <table class="table table-light table-stripped text-center shadow p-3 mb-5 bg-body-tertiary rounded">
-                <thead>
-                    <th>id</th>
-                    <th>Judul</th>
-                    <th>Penulis</th>
-                    <th>Tahun</th>
-                    <th>Genre</th>
-                    <th>Tersedia</th>
-                    <th>Aksi</th>
-                    <th>Set Status</th>
-                </thead>
-                <tbody ID="dataBuku"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <div class="modal fade" id="modalbuku" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="modalJudul"></h1>
-                </div>
-                <div class="modal-body">
-                    <form method="post">
-                        <div class="d-grid row-gap-3">
-                            <div class="row align-items-center" id="hide-id-tambah-buku">
-                                <div class="col-2">
-                                    <label for="id" class="col-form-label">Id</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="number" class="form-control" id="id" disabled="true" value="">
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-2">
-                                    <label for="judul" class="col-form-label">judul</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="text" id="judul" class="form-control"/>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-2">
-                                    <label for="penulis" class="col-form-label">Penulis</label>
-                                </div>
-                                <div class="col-auto">
-                                    <input type="text" id="penulis" class="form-control"/>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-2">
-                                    <label for="tahun" class="col-form-label">Tahun</label>
-                                </div>
-                                <div class="col-3">
-                                    <input type="number" min="1000" max="9999" maxlength="4" class="form-control" id="tahun"/>
-                                </div>
-                            </div>
-                            <div class="row align-items-center">
-                                <div class="col-2">
-                                    <label for="genre" class="col-form-label">Genre</label>
-                                </div>
-                                <div class="col-auto">
-                                    <select class="form-select" id="list_genre">
-                                        <option value="" selected>Pilih genre</option>
-                                        <option value="edukasi">Edukasi</option>
-                                        <option value="novel">Novel</option>
-                                        <option value="fantasty">Fantasty</option>
-                                        <option value="anak">Anak-anak</option>
-                                        <option value="self-improvement">Self Improvement</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row align-items-center" style="display: none;">
-                                <div class="col-2">
-                                    <label for="tersedia" class="col-form-label">Tersedia</label>
-                                </div>
-                                <div class="col-auto">
-                                    <select class="form-select" id="list_tersedia">
-                                        <option value="" selected>Pilih</option>
-                                        <option value="true">Tersedia</option>
-                                        <option value="false">Tidak tersedia</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary" onclick="simpan_buku();" id="btnSimpanBuku">Simpan</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+    <div class="container-fluid vh-100 overflow-hidden">
+        <div class="row h-100">
+            <div class="col-12">
+                <div class="d-flex flex-row justify-content-center gap-5 flex-wrap">
+                    <div class="card shadow bg-body-tertiary border-primary rounded w-100" style="max-width: 350px; height:220px;">
+                        <a href="/user.html" class="card-body align-items-center text-center rounded text-decoration-none align-content-center">
+                            <i class="bi bi-person-circle text-primary"></i>
+                            <h5 class="fs-2 text-primary fw-bold">User</h5>
+                        </a>
+                    </div>
+                    <div class="card shadow bg-body-tertiary border-success rounded w-100" style="max-width: 350px; height:220px;">
+                        <a href="/buku.html" class="card-body align-items-center text-center rounded text-decoration-none align-content-center">
+                            <i class="bi bi-book text-success"></i>
+                            <h5 class="fs-2 text-success fw-bold">Buku</h5>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="batas"></div>
     </div>
-
-    <div class="batas"></div>
 
     <script src="bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
     <script src="js/sesi_user_aktif.js"></script>
-    <script src="js/buku.js"></script>
     <script src="js/logout.js"></script>
 </body>
 </html>

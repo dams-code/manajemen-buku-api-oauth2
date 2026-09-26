@@ -58,7 +58,7 @@ async function updateUser(e){
 
         // console.log(username.value);
 
-        const response_update = await cek_auth_token(`/user/update/${username.value}`, {
+        const response_update = await cek_auth_token(`/user/aktif/update/${username.value}`, {
             method: "PUT",
             body: JSON.stringify(update_data_user)
         });
